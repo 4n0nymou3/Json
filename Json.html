@@ -55,17 +55,64 @@ body
 .btn-telegram
 {
 	background-color: #0088cc;
-    color: white;
+	color: white;
 }
 
 .btn-telegram:hover
 {
 	background-color: #007bb5;
 }
-	</style>
+
+.success-message
+{
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-color: #38a169;
+	color: white;
+	padding: 10px 0;
+	text-align: center;
+	font-weight: bold;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	animation: fadeInOut 3s forwards;
+	z-index: 1000;
+}
+
+@keyframes fadeInOut
+{
+	0%
+	{
+		opacity: 0;
+		transform: translateY(-20px);
+	}
 	
+	10%
+	{
+		opacity: 1;
+		transform: translateY(0);
+	}
+	
+	90%
+	{
+		opacity: 1;
+		transform: translateY(0);
+	}
+	
+	100%
+	{
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+}
+	</style>
+</head>
+
 <body class="min-h-screen flex items-center justify-center p-4">
-	<div class="dark-theme rounded-lg shadow-xl p-8 max-w-2xl w-full">
+	<div class="dark-theme rounded-lg shadow-xl p-8 max-w-2xl w-full relative">
+		<!-- اعلان موفقیت -->
+		<div id="successMessage" class="success-message"> JSON Code Generated Successfully! </div>
 		<h1 class="text-2xl font-bold mb-6 text-center text-gray-300 breathe">Wireguard JSON Code Generator for Sing-box</h1>
 		<div class="space-y-4">
 			<button id="fetchIpButton" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">Fetch IP and Port</button>
@@ -80,14 +127,13 @@ body
 			</div>
 		</div>
 		<div class="mt-6 text-center">
-			<a href="https://t.me/BXAMbot" class="inline-block btn-telegram text-white py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Contact Me</a>
+			<a href="https://example.com" class="inline-block btn-telegram text-white py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Contact Me</a>
 			<p class="text-xs text-gray-400 mt-2">Designed by: Anonymous</p>
 		</div>
 	</div>
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
-<script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
+	<script>
 const fetchIpButton = document.getElementById('fetchIpButton');
 const generateJsonButton = document.getElementById('generateJsonButton');
 const copyJsonButton = document.getElementById('copyJsonButton');
@@ -112,228 +158,189 @@ fetchIpButton.addEventListener('click', async () =>
 		alert('Error fetching IP. Please try again.');
 	}
 });
-generateJsonButton.addEventListener('click', () =>
-{
-	const ip = ipInput.value;
-	const port = portInput.value;
-	if (!ip || !port)
+document.getElementById('generateJsonButton')
+	.addEventListener('click', () =>
 	{
-		alert('Please fetch IP and Port first.');
-		return;
-	}
-	const privateKey = generatePrivateKey();
-	const publicKey = 'bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=';
-	const jsonConfig = {
-		"log":
+		const ip = document.getElementById('ipInput')
+			.value;
+		const port = document.getElementById('portInput')
+			.value;
+		if (!ip || !port)
 		{
-			"disabled": false
-			, "level": "info"
-			, "timestamp": true
+			alert('Please fetch IP and Port first.');
+			return;
 		}
-		, "experimental":
-		{
-			"clash_api":
+		const privateKey = generatePrivateKey();
+		const publicKey = 'bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=';
+		const jsonConfig = {
+			"log":
 			{
-				"external_controller": "127.0.0.1:9090"
-				, "external_ui": "metacubexd"
-				, "external_ui_download_url": "https:\/\/github.com\/MetaCubeX\/metacubexd\/archive\/refs\/heads\/gh-pages.zip"
-				, "external_ui_download_detour": "direct"
-				, "default_mode": "rule"
+				"disabled": false
+				, "level": "info"
+				, "timestamp": true
 			}
-			, "cache_file":
+			, "experimental":
 			{
-				"enabled": true
-				, "path": "cache.db"
-				, "store_fakeip": false
-				, "store_rdrc": false
-				, "rdrc_timeout": "7d"
-			}
-		}
-		, "dns":
-		{
-			"servers": [
+				"clash_api":
 				{
-					"address": "https:\/\/1.1.1.1\/dns-query"
-					, "address_resolver": "dns-local"
-					, "detour": "Proxy"
-					, "strategy": "ipv4_only"
-					, "tag": "dns-remote"
+					"external_controller": "127.0.0.1:9090"
+					, "external_ui": "metacubexd"
+					, "external_ui_download_url": "https:\/\/github.com\/MetaCubeX\/metacubexd\/archive\/refs\/heads\/gh-pages.zip"
+					, "external_ui_download_detour": "direct"
+					, "default_mode": "rule"
+				}
+				, "cache_file":
+				{
+					"enabled": true
+					, "path": "cache.db"
+					, "store_fakeip": false
+					, "store_rdrc": false
+					, "rdrc_timeout": "7d"
+				}
+			}
+			, "dns":
+			{
+				"servers": [
+					{
+						"address": "https:\/\/1.1.1.1\/dns-query"
+						, "address_resolver": "dns-local"
+						, "detour": "Proxy"
+						, "strategy": "ipv4_only"
+						, "tag": "dns-remote"
             }
-				
-				
-				
-				, {
-					"address": "78.157.42.100"
-					, "address_resolver": "dns-local"
-					, "detour": "direct"
-					, "strategy": "ipv4_only"
-					, "tag": "dns-direct"
+					, {
+						"address": "78.157.42.100"
+						, "address_resolver": "dns-local"
+						, "detour": "direct"
+						, "strategy": "ipv4_only"
+						, "tag": "dns-direct"
             }
-				
-				
-				
-				, {
-					"address": "8.8.8.8"
-					, "detour": "direct"
-					, "tag": "dns-local"
+					, {
+						"address": "8.8.8.8"
+						, "detour": "direct"
+						, "tag": "dns-local"
             }
-				
-				
-				
-				, {
-					"address": "rcode:\/\/success"
-					, "tag": "dns-block"
+					, {
+						"address": "rcode:\/\/success"
+						, "tag": "dns-block"
             }
         ]
-			, "rules": [
-				{
-					"domain": []
-					, "rule_set": [
+				, "rules": [
+					{
+						"domain": []
+						, "rule_set": [
                     "geosite-ir"
                 ]
-					, "server": "dns-direct"
+						, "server": "dns-direct"
             }
-				
-				
-				
-				, {
-					"disable_cache": true
-					, "rule_set": [
+					, {
+						"disable_cache": true
+						, "rule_set": [
                     "geosite-category-ads-all"
                     , "geosite-malware"
                     , "geosite-phishing"
                     , "geosite-cryptominers"
                 ]
-					, "server": "dns-block"
+						, "server": "dns-block"
             }
-				
-				
-				
-				, {
-					"outbound": "any"
-					, "server": "dns-direct"
+					, {
+						"outbound": "any"
+						, "server": "dns-direct"
             }
         ]
-			, "independent_cache": true
-		}
-		, "inbounds": [
-			{
-				"type": "tun"
-				, "tag": "tun-in"
-				, "domain_strategy": "ipv4_only"
-				, "interface_name": "sing-tun"
-				, "inet4_address": "172.19.0.1\/30"
-				, "mtu": 1492
-				, "auto_route": true
-				, "strict_route": true
-				, "stack": "gvisor"
-				, "endpoint_independent_nat": true
-				, "sniff": true
-				, "sniff_override_destination": false
+				, "independent_cache": true
+			}
+			, "inbounds": [
+				{
+					"type": "tun"
+					, "tag": "tun-in"
+					, "domain_strategy": "ipv4_only"
+					, "interface_name": "sing-tun"
+					, "inet4_address": "172.19.0.1\/30"
+					, "mtu": 1492
+					, "auto_route": true
+					, "strict_route": true
+					, "stack": "gvisor"
+					, "endpoint_independent_nat": true
+					, "sniff": true
+					, "sniff_override_destination": false
         }
     ]
-		, "outbounds": [
-			{
-				"tag": "Proxy"
-				, "type": "selector"
-				, "outbounds": [
+			, "outbounds": [
+				{
+					"tag": "Proxy"
+					, "type": "selector"
+					, "outbounds": [
                 "URL-TEST"
                 , "xfznrlasia"
             ]
-				, "interrupt_exist_connections": false
+					, "interrupt_exist_connections": false
         }
-			
-			
-			
-			, {
-				"tag": "URL-TEST"
-				, "type": "urltest"
-				, "outbounds": [
+				, {
+					"tag": "URL-TEST"
+					, "type": "urltest"
+					, "outbounds": [
                 "xfznrlasia"
             ]
-				, "url": "https:\/\/detectportal.firefox.com\/success.txt"
-				, "interval": "5m"
-				, "tolerance": 50
-				, "interrupt_exist_connections": false
+					, "url": "https:\/\/detectportal.firefox.com\/success.txt"
+					, "interval": "5m"
+					, "tolerance": 50
+					, "interrupt_exist_connections": false
         }
-			
-			
-			
-			, {
-				"tag": "direct"
-				, "type": "direct"
+				, {
+					"tag": "direct"
+					, "type": "direct"
         }
-			
-			
-			
-			, {
-				"tag": "block"
-				, "type": "block"
+				, {
+					"tag": "block"
+					, "type": "block"
         }
-			
-			
-			
-			, {
-				"tag": "dns-out"
-				, "type": "dns"
+				, {
+					"tag": "dns-out"
+					, "type": "dns"
         }
-			
-			
-			
-			, {
-				"type": "wireguard"
-				, "server": ip
-				, "server_port": parseInt(port)
-				, "local_address": [
+				, {
+					"type": "wireguard"
+					, "server": ip
+					, "server_port": parseInt(port)
+					, "local_address": [
                 "172.16.0.2\/32"
                 , "2606:4700:110:883d:8027:ed5a:aae0:f7a2\/128"
             ]
-				, "private_key": "wF4MIEolgwPyXrxK8Wr04lm2r2nsawfv+cwtP0I9SHY="
-				, "peer_public_key": "bmXOC+F1FxEMF9dyiK2H5\/1SUtzH0JuVo51h2wPfgyo="
-				, "mtu": 1280
-				, "reserved": "SkcG"
-				, "tag": "xfznrlasia"
+					, "private_key": "wF4MIEolgwPyXrxK8Wr04lm2r2nsawfv+cwtP0I9SHY="
+					, "peer_public_key": "bmXOC+F1FxEMF9dyiK2H5\/1SUtzH0JuVo51h2wPfgyo="
+					, "mtu": 1280
+					, "reserved": "SkcG"
+					, "tag": "xfznrlasia"
         }
     ]
-		, "route":
-		{
-			"auto_detect_interface": true
-			, "override_android_vpn": true
-			, "final": "Proxy"
-			, "rules": [
-				{
-					"protocol": "dns"
-					, "outbound": "dns-out"
+			, "route":
+			{
+				"auto_detect_interface": true
+				, "override_android_vpn": true
+				, "final": "Proxy"
+				, "rules": [
+					{
+						"protocol": "dns"
+						, "outbound": "dns-out"
             }
-				
-				
-				
-				, {
-					"network": "udp"
-					, "port": 443
-					, "outbound": "block"
+					, {
+						"network": "udp"
+						, "port": 443
+						, "outbound": "block"
             }
-				
-				
-				
-				, {
-					"ip_is_private": true
-					, "outbound": "direct"
+					, {
+						"ip_is_private": true
+						, "outbound": "direct"
             }
-				
-				
-				
-				, {
-					"domain_suffix": [
+					, {
+						"domain_suffix": [
                     ".ir"
                 ]
-					, "outbound": "direct"
+						, "outbound": "direct"
             }
-				
-				
-				
-				, {
-					"rule_set": [
+					, {
+						"rule_set": [
                     "geosite-category-ads-all"
                     , "geosite-malware"
                     , "geosite-phishing"
@@ -341,111 +348,127 @@ generateJsonButton.addEventListener('click', () =>
                     , "geoip-malware"
                     , "geoip-phishing"
                 ]
-					, "outbound": "block"
+						, "outbound": "block"
             }
-				
-				
-				
-				, {
-					"rule_set": [
+					, {
+						"rule_set": [
                     "geoip-ir"
                     , "geosite-ir"
                 ]
-					, "outbound": "direct"
+						, "outbound": "direct"
             }
         ]
-			, "rule_set": [
-				{
-					"tag": "geosite-ir"
-					, "type": "remote"
-					, "format": "binary"
-					, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-ir.srs"
-					, "download_detour": "direct"
-					, "update_interval": "1d"
+				, "rule_set": [
+					{
+						"tag": "geosite-ir"
+						, "type": "remote"
+						, "format": "binary"
+						, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-ir.srs"
+						, "download_detour": "direct"
+						, "update_interval": "1d"
             }
-				
-				
-				
-				, {
-					"tag": "geosite-category-ads-all"
-					, "type": "remote"
-					, "format": "binary"
-					, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-category-ads-all.srs"
-					, "download_detour": "direct"
-					, "update_interval": "1d"
+					, {
+						"tag": "geosite-category-ads-all"
+						, "type": "remote"
+						, "format": "binary"
+						, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-category-ads-all.srs"
+						, "download_detour": "direct"
+						, "update_interval": "1d"
             }
-				
-				
-				
-				, {
-					"tag": "geosite-malware"
-					, "type": "remote"
-					, "format": "binary"
-					, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-malware.srs"
-					, "download_detour": "direct"
-					, "update_interval": "1d"
+					, {
+						"tag": "geosite-malware"
+						, "type": "remote"
+						, "format": "binary"
+						, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-malware.srs"
+						, "download_detour": "direct"
+						, "update_interval": "1d"
             }
-				
-				
-				
-				, {
-					"tag": "geosite-phishing"
-					, "type": "remote"
-					, "format": "binary"
-					, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-phishing.srs"
-					, "download_detour": "direct"
-					, "update_interval": "1d"
+					, {
+						"tag": "geosite-phishing"
+						, "type": "remote"
+						, "format": "binary"
+						, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-phishing.srs"
+						, "download_detour": "direct"
+						, "update_interval": "1d"
             }
-				
-				
-				
-				, {
-					"tag": "geosite-cryptominers"
-					, "type": "remote"
-					, "format": "binary"
-					, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-cryptominers.srs"
-					, "download_detour": "direct"
-					, "update_interval": "1d"
+					, {
+						"tag": "geosite-cryptominers"
+						, "type": "remote"
+						, "format": "binary"
+						, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geosite-cryptominers.srs"
+						, "download_detour": "direct"
+						, "update_interval": "1d"
             }
-				
-				
-				
-				, {
-					"tag": "geoip-ir"
-					, "type": "remote"
-					, "format": "binary"
-					, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geoip-ir.srs"
-					, "download_detour": "direct"
-					, "update_interval": "1d"
+					, {
+						"tag": "geoip-ir"
+						, "type": "remote"
+						, "format": "binary"
+						, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geoip-ir.srs"
+						, "download_detour": "direct"
+						, "update_interval": "1d"
             }
-				
-				
-				
-				, {
-					"tag": "geoip-malware"
-					, "type": "remote"
-					, "format": "binary"
-					, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geoip-malware.srs"
-					, "download_detour": "direct"
-					, "update_interval": "1d"
+					, {
+						"tag": "geoip-malware"
+						, "type": "remote"
+						, "format": "binary"
+						, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geoip-malware.srs"
+						, "download_detour": "direct"
+						, "update_interval": "1d"
             }
-				
-				
-				
-				, {
-					"tag": "geoip-phishing"
-					, "type": "remote"
-					, "format": "binary"
-					, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geoip-phishing.srs"
-					, "download_detour": "direct"
-					, "update_interval": "1d"
+					, {
+						"tag": "geoip-phishing"
+						, "type": "remote"
+						, "format": "binary"
+						, "url": "https:\/\/raw.githubusercontent.com\/Chocolate4U\/Iran-sing-box-rules\/rule-set\/geoip-phishing.srs"
+						, "download_detour": "direct"
+						, "update_interval": "1d"
             }
         ]
+			}
+		};
+		const jsonString = JSON.stringify(jsonConfig, null, 2);
+		const jsonOutput = document.getElementById('jsonOutput');
+		jsonOutput.textContent = '';
+		let index = 0;
+		const slowPartLength = 150; // تعداد کاراکترهایی که با سرعت آهسته تایپ می‌شوند (مثلا 100 کاراکتر اول)
+		const slowDuration = 6000; // زمان تایپ برای بخش آهسته (مثلا ۵ ثانیه)
+		const fastDuration = 2000; // زمان تایپ برای ادامه کد (مثلا ۳ ثانیه)
+		function typeWriter(currentTime, totalDuration, startTime, remainingString, completeCallback)
+		{
+			const elapsedTime = currentTime - startTime;
+			const progress = Math.min(elapsedTime / totalDuration, 1);
+			const charsToShow = Math.floor(progress * remainingString.length);
+			jsonOutput.textContent += remainingString.substring(0, charsToShow);
+			Prism.highlightElement(jsonOutput);
+			if (charsToShow < remainingString.length)
+			{
+				requestAnimationFrame((newTime) => typeWriter(newTime, totalDuration, startTime, remainingString.slice(charsToShow), completeCallback));
+			}
+			else if (completeCallback)
+			{
+				completeCallback();
+			}
 		}
-	};
-	jsonOutput.textContent = JSON.stringify(jsonConfig, null, 2);
-	Prism.highlightElement(jsonOutput);
-});
+		requestAnimationFrame((startTime) =>
+		{
+			typeWriter(startTime, slowDuration, startTime, jsonString.substring(0, slowPartLength), () =>
+			{
+				requestAnimationFrame((newStartTime) =>
+				{
+					typeWriter(newStartTime, fastDuration, newStartTime, jsonString.substring(slowPartLength), () =>
+					{
+						Prism.highlightElement(jsonOutput);
+						const successMessage = document.getElementById('successMessage');
+						successMessage.style.display = 'block';
+						setTimeout(() =>
+						{
+							successMessage.style.display = 'none';
+						}, 4000);
+					});
+				});
+			});
+		});
+	});
 document.getElementById('copyJsonButton')
 	.addEventListener('click', function()
 	{
@@ -454,9 +477,9 @@ document.getElementById('copyJsonButton')
 		navigator.clipboard.writeText(jsonOutput)
 			.then(function()
 			{
-                const copyButton = document.getElementById('copyJsonButton');
+				const copyButton = document.getElementById('copyJsonButton');
 				copyButton.textContent = 'Copied!';
-                setTimeout(function()
+				setTimeout(function()
 				{
 					copyButton.textContent = 'Copy';
 				}, 2000);
@@ -474,6 +497,7 @@ function generatePrivateKey()
 	result += '=';
 	return result;
 }
-</script>
+	</script>
+</body>
 
 </html>
