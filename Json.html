@@ -430,9 +430,9 @@ document.getElementById('generateJsonButton')
 		const jsonOutput = document.getElementById('jsonOutput');
 		jsonOutput.textContent = '';
 		let index = 0;
-		const slowPartLength = 150; // تعداد کاراکترهایی که با سرعت آهسته تایپ می‌شوند (مثلا 100 کاراکتر اول)
-		const slowDuration = 6000; // زمان تایپ برای بخش آهسته (مثلا ۵ ثانیه)
-		const fastDuration = 2000; // زمان تایپ برای ادامه کد (مثلا ۳ ثانیه)
+		const slowPartLength = 500;
+		const slowDuration = 2000;
+		const fastDuration = 1000;
 		function typeWriter(currentTime, totalDuration, startTime, remainingString, completeCallback)
 		{
 			const elapsedTime = currentTime - startTime;
