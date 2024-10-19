@@ -1,2 +1,2 @@
-# Singbox
-Wireguard JSON Code Generator for Singbox
+# Json Generator
+Wireguard JSON Code Generator
