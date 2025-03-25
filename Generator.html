@@ -150,7 +150,7 @@ fetchIpButton.addEventListener('click', async () =>
 {
 	try
 	{
-		const response = await fetch('https://raw.githubusercontent.com/ircfspace/endpoint/refs/heads/main/ip.json');
+		const response = await fetch('https://raw.githubusercontent.com/4n0nymou3/cloudflare-clean-ip-scanner/refs/heads/main/data/ips.json');
 		const data = await response.json();
 		const ipList = data.ipv4;
 		const randomIndex = Math.floor(Math.random() * ipList.length);
